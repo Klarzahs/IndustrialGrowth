@@ -6,4 +6,5 @@ public interface Addition {
 	public String getName();
 	public Ressource roundAddition();
 	public Ressource positionAddition();
+	public int getCost();
 }

@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import org.w3c.dom.css.Rect;
 
 import schemmer.hexagon.game.Main;
+import schemmer.hexagon.player.Player;
 import schemmer.hexagon.utils.Log;
 
 public abstract class HoverableIcon {
@@ -85,10 +86,10 @@ public abstract class HoverableIcon {
 		messages = strings;
 	}
 	
-	public abstract void drawIcons(Graphics2D g2d);
+	public abstract void drawIcons(Player p, Graphics2D g2d);
 	
 	public Rectangle getBoundingRect(){
 		return this.boundingRect;
 	}
-	
+
 }

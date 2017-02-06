@@ -18,6 +18,11 @@ public abstract class MediaAddition implements Addition{
 		public String getName() {
 			return "Internet";
 		}
+		
+		@Override
+		public int getCost() {
+			return 5;
+		}
 	}
 	
 	public static class MediaAdditionPaper extends MediaAddition {
@@ -35,6 +40,11 @@ public abstract class MediaAddition implements Addition{
 		@Override
 		public String getName() {
 			return "Paper";
+		}
+		
+		@Override
+		public int getCost() {
+			return 5;
 		}
 	}
 

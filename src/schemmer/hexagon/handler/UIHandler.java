@@ -7,25 +7,34 @@ import schemmer.hexagon.game.Main;
 import schemmer.hexagon.player.Player;
 import schemmer.hexagon.ui.CurrentHexagonIcon;
 import schemmer.hexagon.ui.NextHexagonIcon;
+import schemmer.hexagon.ui.PlayerRessourceUI;
+import schemmer.hexagon.ui.PopupInfo;
 
 public class UIHandler {
 	private CurrentHexagonIcon currentHexs;
 	private NextHexagonIcon nextHexs;
+	private PlayerRessourceUI presUI;
+	private PopupInfo info;
 	
-	private Main main;
+	private static UIHandler instance;
+	
 	
 	public UIHandler(Main m){
-		main = m;
-		
-		currentHexs = new CurrentHexagonIcon(25, main.getGUI().getHeight() - 100, 75, 75, 2, 15, 15, 2);
-		nextHexs = new NextHexagonIcon(250, main.getGUI().getHeight() - 100, 75, 75, 2, 15, 15, 2);
+		instance = this;
+		currentHexs = new CurrentHexagonIcon(25, Main.instance.getGUI().getHeight() - 100, 75, 75, 2, 15, 15, 2);
+		nextHexs = new NextHexagonIcon(250, Main.instance.getGUI().getHeight() - 100, 75, 75, 2, 15, 15, 2);
+		presUI = new PlayerRessourceUI();
+		info = new PopupInfo();
 	}
 	
 	public void draw(Graphics2D g2d){
-		Player currentPlayer = main.getRH().getCurrentPlayer();
-		int maxPlayer = main.getRH().getPlayerCount();
-		currentHexs.draw(currentPlayer, g2d);
-		nextHexs.draw(currentPlayer, g2d);
+		if(Main.PHASE >= 2){
+			Player currentPlayer = Main.instance.getRH().getCurrentPlayer();
+			presUI.draw(currentPlayer, g2d);
+			currentHexs.draw(currentPlayer, g2d);
+			nextHexs.draw(currentPlayer, g2d);
+			info.draw(g2d);
+		}
 	}
 	
 	
@@ -37,14 +46,10 @@ public class UIHandler {
 		if(currentHexs.getBoundingRect().contains(x, y)){
 			return true;
 		}
+		if(presUI.getBoundingRect().contains(x, y)){
+			return true;
+		}
 		return false;
-	}
-	
-	public void resetAllIcons(){
-//		getBuildingIcons().resetBuildingIconNr();
-//		if(getBuildingMenu() != null)
-//			getBuildingMenu().resetUnitIconNr();
-//		stateIcons.resetStateIconNr();
 	}
 	
 	public void resetHoveringInformation() {
@@ -72,6 +77,16 @@ public class UIHandler {
 	
 	public int getMarkedHexagon(){
 		return currentHexs.getMarkedNr();
+	}
+
+	public static void displayAnnotation(String text, int x, int y){
+		if(instance == null) return;
+		instance.info.displayAnnotation(text, x, y);
+	}
+	
+	public static void hideAnnotation(){
+		if(instance == null) return;
+		instance.info.hideAnnotation();
 	}
 	
 }

@@ -18,6 +18,11 @@ public abstract class SalesAddition implements Addition{
 		public String getName() {
 			return "Store";
 		}
+
+		@Override
+		public int getCost() {
+			return 2;
+		}
 	}
 	
 	public static class SalesAdditionManagement extends SalesAddition {
@@ -36,6 +41,11 @@ public abstract class SalesAddition implements Addition{
 		public String getName() {
 			return "Sales Man.";
 		}
+		
+		@Override
+		public int getCost() {
+			return 7;
+		}
 	}
 	
 	public static class SalesAdditionMall extends SalesAddition {
@@ -52,6 +62,11 @@ public abstract class SalesAddition implements Addition{
 		@Override
 		public String getName() {
 			return "Mall";
+		}
+		
+		@Override
+		public int getCost() {
+			return 7;
 		}
 	}
 

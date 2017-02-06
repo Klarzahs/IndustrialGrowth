@@ -23,12 +23,12 @@ import schemmer.hexagon.handler.EntityHandler;
 import schemmer.hexagon.handler.MapHandler;
 import schemmer.hexagon.handler.RoundHandler;
 import schemmer.hexagon.handler.UIHandler;
+import schemmer.hexagon.loader.FontLoader;
 import schemmer.hexagon.loader.Image;
 import schemmer.hexagon.loader.ImageLoader;
 import schemmer.hexagon.loader.ImageNumber;
 import schemmer.hexagon.player.Player;
 import schemmer.hexagon.type.Hexagon;
-import schemmer.hexagon.utils.Log;
 
 public class Main implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, WindowStateListener {
 
@@ -71,6 +71,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 		createUI();
 
 		Main.PHASE = 1;
+		FontLoader.load();
 		il = new ImageLoader(this, Image.class, ImageNumber.class);
 		while(Main.PHASE != 2){}
 		rh.initHexs();
@@ -163,6 +164,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 				}
 			}
 			mh.setHovered(e);
+			UIHandler.hideAnnotation();
 		}
 	}
 	
@@ -193,7 +195,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 					Hexagon.zoomOut();
 					break;
 				case 32: // " "
-					gui.getScreen().appendDebug(rh.getCurrentRound() + ": " + rh.getCurrentPlayer());
+					gui.getScreen().setDebug(rh.getCurrentRound() + ": " + rh.getCurrentPlayer());
 					break;
 				case 116: // "F5" - Quicksave
 					gl.pause();
@@ -206,7 +208,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 					gl.unpause();
 					break;
 				default:
-					gui.getScreen().appendDebug("" + e.getKeyCode());
+					gui.getScreen().setDebug("" + e.getKeyCode());
 					break;
 				}
 				if (e.getKeyCode() <= 57 && e.getKeyCode() >= 49)
@@ -217,6 +219,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 
 	private void handleLeftClick(MouseEvent e) {
 		if (SwingUtilities.isLeftMouseButton(e)) {
+			UIHandler.hideAnnotation();
 			this.gui.getRootPane().setCursor(leftClick);
 			if(this.uih.cursorInIconArea(e)){
 				uih.handleLeftClick(e);
@@ -229,6 +232,7 @@ public class Main implements MouseListener, MouseMotionListener, MouseWheelListe
 
 	private void handleRightClick(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {
+			UIHandler.hideAnnotation();
 			this.gui.getRootPane().setCursor(rightClick);
 		}
 	}

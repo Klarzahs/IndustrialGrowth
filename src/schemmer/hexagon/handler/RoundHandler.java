@@ -10,6 +10,7 @@ public class RoundHandler {
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private MapHandler mh;
 	private volatile int playerCount = -1, currentPlayer, currentRound, AIcount;		// TODO: AIcount
+	private final int MAXROUND = 25;
 	private Main main;
 	
 	public RoundHandler(MapHandler mh){
@@ -47,6 +48,9 @@ public class RoundHandler {
 	public void startRound(){
 		currentPlayer = 0;
 		currentRound += 1;
+		if(currentRound >= MAXROUND){
+			invokeEndScreen();
+		}
 	}
 	
 	public void nextPlayer(){
@@ -56,9 +60,10 @@ public class RoundHandler {
 	public void nextPlayerLocal(){
 		mh.resetMarked();
 		getCurrentPlayer().refreshAll();
-		currentPlayer = (currentPlayer + 1) % (getPlayerCount() + getAICount());
-		if(currentPlayer == playerCount)
+		currentPlayer = (currentPlayer + 1);
+		if(currentPlayer == playerCount){
 			startRound();
+		}
 	}
 
 	public void quicksave(){
@@ -106,5 +111,14 @@ public class RoundHandler {
 			p.refreshAll();
 		}
 		Log.d("Inited hexs");
+	}
+	
+	public int getRoundDiff(){
+		return MAXROUND - currentRound;
+	}
+	
+	private void invokeEndScreen(){
+		Log.d("You won! yay");
+		System.exit(0);
 	}
 }

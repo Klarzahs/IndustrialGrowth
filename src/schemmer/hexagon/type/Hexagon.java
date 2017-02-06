@@ -12,6 +12,7 @@ import schemmer.hexagon.addition.Addition;
 import schemmer.hexagon.addition.AdditionFactory;
 import schemmer.hexagon.game.Main;
 import schemmer.hexagon.game.Screen;
+import schemmer.hexagon.loader.FontLoader;
 import schemmer.hexagon.loader.Image;
 import schemmer.hexagon.loader.ImageLoader;
 import schemmer.hexagon.loader.ImageNumber;
@@ -95,56 +96,80 @@ public class Hexagon {
 	
 	public void drawPicture(Graphics2D g2d, int offX, int offY){
 		recalculateCenter();
-//		g2d.drawImage(image, (int) (center.x-offX-SIZE+7*OSF), (int)center.y-offY-SIZE, (int) (SIZE*Math.sqrt(3) +1*OSF), (int)(SIZE*2 + 1 * OSF), null);
 		drawAddition(g2d, offX, offY);
+	}
+	
+	public void drawAdditionPreview(Graphics2D g2d, int x, int y){
+		if(addition != null){
+			int w = (int) (32 / 2);
+			int h = (int) (32 / 2);
+			g2d.setFont(FontLoader.YELLOWSUN.deriveFont(Font.BOLD, 20f));
+			g2d.setColor(Color.BLACK);
+			g2d.drawString(addition.getName(), x, y);
+			g2d.setFont(FontLoader.YELLOWSUN.deriveFont(Font.PLAIN, 20f));
+			Ressource r = addition.roundAddition();
+			drawRoundAddition(g2d, x, y, w, h, r, 1f);
+			r = addition.positionAddition();
+			drawPositionAddition(g2d, x, y, w, h, r, 1f);
+			//cost
+			g2d.setColor(Color.RED);
+			g2d.setFont(FontLoader.YELLOWSUN.deriveFont(Font.ITALIC + Font.BOLD, 15f));
+			g2d.drawString("Cost: "+addition.getCost(), x, y + 55);
+		}
 	}
 	
 	public void drawAddition(Graphics2D g2d, int offX, int offY){
 		if(addition != null){
+			//centering
 			int x = (int) (center.x - offX -SIZE + 12 * OSF);
 			int y = (int)(center.y - offY - SIZE + 40 * OSF);
 			int w = (int) (32 / 2 * OSF);
 			int h = (int) (32 / 2 * OSF);
-			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int)(20 * OSF))); 
+			g2d.setFont(FontLoader.YELLOWSUN.deriveFont(Font.BOLD, 20*OSF));
 			g2d.setColor(Color.BLACK);
 			g2d.drawString(addition.getName(), x, y);
+			g2d.setFont(FontLoader.YELLOWSUN.deriveFont(Font.PLAIN, 20*OSF));
+			//round
 			Ressource r = addition.roundAddition();
-			drawRoundAddition(g2d, x, y, w, h, r);
+			drawRoundAddition(g2d, x, y, w, h, r, OSF);
+			//position
 			r = addition.positionAddition();
-			drawPositionAddition(g2d, x, y, w, h, r);
+			drawPositionAddition(g2d, x, y, w, h, r, OSF);
 		}
 	}
 	
-	private void drawRoundAddition(Graphics2D g2d, int x, int y, int w, int h, Ressource r){
+	private void drawRoundAddition(Graphics2D g2d, int x, int y, int w, int h, Ressource r, float scale){
+		y += (int)3*scale;
 		if(r.money != 0){
 			BufferedImage img = AdditionFactory.getImages()[0];
 			g2d.drawImage(img, x, y, w, h, null);
-			g2d.drawString(""+r.money, x + w + 5, (int)(y + 15 * OSF));
+			g2d.drawString(""+r.money, x + w + 5, (int)(y + 15 * scale));
 		}
 		if(r.stock != 0){
 			BufferedImage img = AdditionFactory.getImages()[1];
 			
 			if(r.money != 0){
-				y += 16 * OSF;
+				y += 16 * scale;
 			}
 			g2d.drawImage(img, x, y, w, h, null);
-			g2d.drawString(""+r.stock, x + w + 5, (int)(y + 15 * OSF));
+			g2d.drawString(""+r.stock, x + w + 5, (int)(y + 17 * scale));
 		}
 	}
 	
-	private void drawPositionAddition(Graphics2D g2d, int x, int y, int w, int h, Ressource r){
+	private void drawPositionAddition(Graphics2D g2d, int x, int y, int w, int h, Ressource r, float scale){
+		y += (int)3*scale;
 		if(r.money != 0){
 			BufferedImage img = AdditionFactory.getImages()[0];
 			g2d.drawImage(img, x, y, w, h, null);
-			g2d.drawString(""+r.money + "p.A.", x + w + 5, (int)(y + 15 * OSF));
+			g2d.drawString(""+r.money + " p.adj.", x + w + 5, (int)(y + 15 * scale));
 		}
 		if(r.stock != 0){
 			BufferedImage img = AdditionFactory.getImages()[1];
 			if(r.money != 0){
-				y += 16 * OSF;
+				y += 16 * scale;
 			}
 			g2d.drawImage(img, x, y, w, h, null);
-			g2d.drawString(""+r.stock + "p.A.", x + w + 5, (int)(y + 15 * OSF));
+			g2d.drawString(""+r.stock + " p.adj.", x + w + 5, (int)(y + 17 * scale));
 		}
 	}
 	

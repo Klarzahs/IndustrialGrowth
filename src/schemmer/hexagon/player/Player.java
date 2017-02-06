@@ -6,14 +6,14 @@ import java.util.Random;
 
 import schemmer.hexagon.addition.AdditionFactory;
 import schemmer.hexagon.game.Main;
-import schemmer.hexagon.handler.MapHandler;
-import schemmer.hexagon.type.HexTypeInt;
 import schemmer.hexagon.type.Hexagon;
-import schemmer.hexagon.utils.Log;
+import schemmer.hexagon.utils.Ressource;
 
 public class Player {
-	private int money = 10;
-	private int stockprize = 1;
+	private int money = 9;
+	private int stock = 0;
+	private int stockPR = 0;
+	private int moneyPR = 0;
 	private boolean hasRessourcesChanged = true;
 
 	private PlayerColor color;
@@ -43,26 +43,10 @@ public class Player {
 	}
 
 	private void updateRessources() {
-		// setFoodCount(getFoodCount() + getFoodPR());
-		// setWoodCount(getWoodCount() + getWoodPR());
-		// setStoneCount(getStoneCount() + getStonePR());
-		// setGoldCount(getGoldCount() + getGoldPR());
+		Ressource r = getPR();
+		setMoneyCount(getMoneyCount() + r.money);
+		setStockCount(getStockCount() + r.stock);
 		hasRessourcesChanged = false;
-	}
-
-	public int getFoodPR() {
-		// if(hasRessourcesChanged){
-		// foodPR = getRate(UnitState.STATE_FOOD);
-		// foodPR -= villagers.size(); // cost per villager
-		// return foodPR;
-		// }
-		// else
-		// return foodPR;
-		return 0;
-	}
-
-	public void setFoodPR(int foodPR) {
-		// this.foodPR = foodPR;
 	}
 
 	public void setRessourcesChanged(boolean b) {
@@ -128,17 +112,16 @@ public class Player {
 		case 0: 
 			h.setType(currentHexagonLeft.getType().getIndex());
 			h.setAddition(currentHexagonLeft.getAddition());
+			this.money -= currentHexagonLeft.getAddition().getCost();
 			break;
 		case 1:
 			h.setType(currentHexagonRight.getType().getIndex());
 			h.setAddition(currentHexagonRight.getAddition());
+			this.money -= currentHexagonRight.getAddition().getCost();
 			break;
 		}
 		h.createPicture();
 		currentHexagons.add(h);
-		if(isMarked >= 0){
-			refreshAll();
-		}
 	}
 	
 	public boolean isHexagonPlacable(Hexagon placer){
@@ -157,5 +140,64 @@ public class Player {
 	
 	public void createStarterHex(){
 		Main.instance.getMH().setStarterHex(this);
+	}
+	
+	public int getMoneyCount(){
+		return money;
+	}
+	
+	public int getStockCount(){
+		return stock;
+	}
+	
+	public int getMoneyPR(){
+		return moneyPR;
+	}
+	
+	public int getStockPR(){
+		return stockPR;
+	}
+	
+	private Ressource getPR(){
+		Ressource res = new Ressource(0,0);
+		Iterator<Hexagon> it = currentHexagons.iterator();
+		while(it.hasNext()){
+			Hexagon h = it.next();
+			res.add(getAdjencyBonus(h));
+			res.add(getRoundBonus(h));
+		}
+		moneyPR = res.money;
+		stockPR = res.stock;
+		return res;
+	}
+	
+	private Ressource getAdjencyBonus(Hexagon h){
+		Ressource res = new Ressource(0,0);
+		Ressource r = h.getAddition().positionAddition();
+		for(int i = 0; i < Hexagon.CORNERS; i++){
+			Hexagon temp = h.neighbour(i);
+			if(temp != null && temp.getType() != null){
+				if(h.getType().getIndex() == temp.getType().getIndex()){
+					res.add(r);
+				}
+			}
+		}
+		return res;
+	}
+	
+	private Ressource getRoundBonus(Hexagon h){
+		return h.getAddition().roundAddition();
+	}
+	
+	private void setMoneyCount(int m){
+		money = m;
+	}
+	
+	private void setStockCount(int s){
+		stock = s;
+	}
+	
+	public boolean enoughMoney(int m){
+		return m <= this.money;
 	}
 }

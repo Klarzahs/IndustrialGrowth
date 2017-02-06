@@ -18,6 +18,11 @@ public abstract class ProductionAddition implements Addition {
 		public String getName() {
 			return "Chem. Pl.";
 		}
+		
+		@Override
+		public int getCost() {
+			return 2;
+		}
 	}
 	
 	public static class ProductionAdditionPowerPlant extends ProductionAddition {
@@ -35,6 +40,11 @@ public abstract class ProductionAddition implements Addition {
 		@Override
 		public String getName() {
 			return "Pow. Pl.";
+		}
+		
+		@Override
+		public int getCost() {
+			return 2;
 		}
 	}
 
@@ -54,6 +64,11 @@ public abstract class ProductionAddition implements Addition {
 		@Override
 		public String getName() {
 			return "Chem. Pl.";
+		}
+		
+		@Override
+		public int getCost() {
+			return 3;
 		}
 	}
 }

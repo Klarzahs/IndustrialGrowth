@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import schemmer.hexagon.handler.EntityHandler;
 import schemmer.hexagon.handler.MapHandler;
 import schemmer.hexagon.handler.UIHandler;
+import schemmer.hexagon.loader.FontLoader;
 import schemmer.hexagon.loader.Image;
 import schemmer.hexagon.loader.ImageLoader;
 import schemmer.hexagon.loader.ImageNumber;
@@ -74,14 +75,15 @@ public class Screen extends JPanel{
 				drawBackground(g2d);
 				mh.draw(g2d, offX, offY);
 				eh.draw(g2d, offX, offY);
-				if(uih != null) 
-					uih.draw(g2d);
+				uih.draw(g2d);
+				
+				g2d.setColor(Color.YELLOW);
+				g2d.setFont(FontLoader.YELLOWSUN.deriveFont(20f));
+				g2d.drawString(debug, WIDTH/2, HEIGHT-100);
+				g2d.drawString(fps, WIDTH-100, 20);
 			}else{
 				Log.d("somethings wrong!"+(main.getRH() == null)+" "+(main.getIL() == null));
 			}
-			g2d.setColor(Color.YELLOW);
-			g2d.drawString(debug, WIDTH/2, HEIGHT-100);
-			g2d.drawString(fps, WIDTH-100, 20);
 		}
 	}
 	

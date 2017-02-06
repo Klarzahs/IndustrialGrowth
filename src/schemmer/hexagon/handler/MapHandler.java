@@ -211,11 +211,21 @@ public class MapHandler {
 			Player p = Main.instance.getRH().getCurrentPlayer();
 			Hexagon h = this.getInArray(c);
 			if(h != null && h.getType() != null){
+				UIHandler.displayAnnotation("Can't place that there!", e.getX(), e.getY());
 				return;
 			}
+			int cost = p.getCurrentHexagon(uih.getMarkedHexagon()).getAddition().getCost();
 			if(p.isHexagonPlacable(h)){
-				p.addHexagon(h, uih.getMarkedHexagon());
+				if(p.enoughMoney(cost)){
+					p.addHexagon(h, uih.getMarkedHexagon());
+					Main.instance.getRH().nextPlayer();
+				}else{
+					UIHandler.displayAnnotation("Not enough money, costs: "+cost, e.getX(), e.getY());
+				}
+			}else{
+				UIHandler.displayAnnotation("Can't place that there!", e.getX(), e.getY());
 			}
+			
 		}
 	}
 

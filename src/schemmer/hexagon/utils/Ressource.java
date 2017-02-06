@@ -8,4 +8,9 @@ public class Ressource {
 		this.money = money;
 		this.stock = stock;
 	}
+	
+	public void add(Ressource r){
+		this.money += r.money;
+		this.stock += r.stock;
+	}
 }

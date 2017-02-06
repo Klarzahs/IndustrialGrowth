@@ -6,7 +6,7 @@ public abstract class OfficeAddition implements Addition{
 	public static class OfficeAdditionCentre extends OfficeAddition {
 		@Override
 		public Ressource roundAddition() {
-			return new Ressource(1, 1);
+			return new Ressource(1, 0);
 		}
 
 		@Override
@@ -17,6 +17,11 @@ public abstract class OfficeAddition implements Addition{
 		@Override
 		public String getName() {
 			return "Centre";
+		}
+		
+		@Override
+		public int getCost() {
+			return 0;
 		}
 	}
 	
@@ -36,6 +41,11 @@ public abstract class OfficeAddition implements Addition{
 		public String getName() {
 			return "Empl. Hous.";
 		}
+		
+		@Override
+		public int getCost() {
+			return 7;
+		}
 	}
 	
 	public static class OfficeAdditionCubicle extends OfficeAddition {
@@ -52,6 +62,11 @@ public abstract class OfficeAddition implements Addition{
 		@Override
 		public String getName() {
 			return "Cubicle";
+		}
+		
+		@Override
+		public int getCost() {
+			return 2;
 		}
 	}
 }
